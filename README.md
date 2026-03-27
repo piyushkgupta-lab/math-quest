@@ -14,4 +14,4 @@ A fun, arcade-style math game for Grade 7 students. Built with HTML, CSS, and Ja
 
 ## Play it
 
-Visit: `https://YOUR-USERNAME.github.io/math-quest/`
+Visit: `https://piyushkgupta-lab.github.io/math-quest/`
