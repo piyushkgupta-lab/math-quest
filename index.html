@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Math Quest">
+<meta name="theme-color" content="#0f0e17">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Math Quest — Level Up Your Brain!</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0f0e17;
+  --surface: #1a1932;
+  --surface2: #232145;
+  --accent1: #ff6b6b;
+  --accent2: #ffd93d;
+  --accent3: #6bcb77;
+  --accent4: #4d96ff;
+  --accent5: #c084fc;
+  --text: #fffffe;
+  --text-dim: #a7a9be;
+  --radius: 16px;
+  --glow-green: 0 0 20px rgba(107,203,119,0.4);
+  --glow-red: 0 0 20px rgba(255,107,107,0.4);
+  --glow-blue: 0 0 20px rgba(77,150,255,0.4);
+  --glow-yellow: 0 0 20px rgba(255,217,61,0.4);
+}
+
+body {
+  font-family: 'Fredoka', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Animated background grid */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(77,150,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(77,150,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app { position: relative; z-index: 1; max-width: 520px; margin: 0 auto; padding: 16px; min-height: 100vh; }
+
+/* ===== TOP BAR ===== */
+.top-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 0; margin-bottom: 8px;
+}
+.logo {
+  font-size: 1.5rem; font-weight: 700;
+  background: linear-gradient(135deg, var(--accent2), var(--accent1));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+.logo span { font-size: 0.7em; }
+
+.stats-row {
+  display: flex; gap: 12px; align-items: center;
+}
+.stat-pill {
+  display: flex; align-items: center; gap: 5px;
+  background: var(--surface); border-radius: 20px;
+  padding: 6px 14px; font-size: 0.85rem; font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.stat-pill .icon { font-size: 1.1em; }
+
+/* ===== LEVEL / XP BAR ===== */
+.xp-section { margin-bottom: 20px; }
+.xp-header { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-dim); margin-bottom: 6px; }
+.xp-bar-bg {
+  height: 10px; background: var(--surface); border-radius: 10px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.xp-bar-fill {
+  height: 100%; border-radius: 10px;
+  background: linear-gradient(90deg, var(--accent4), var(--accent5));
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ===== SCREEN: HOME ===== */
+.home-screen { animation: fadeUp 0.4s ease; }
+
+.welcome-card {
+  background: linear-gradient(135deg, #1e1b4b, #312e81);
+  border-radius: var(--radius); padding: 28px 24px;
+  margin-bottom: 20px; position: relative; overflow: hidden;
+  border: 1px solid rgba(129,140,248,0.15);
+}
+.welcome-card::after {
+  content: '🧠'; position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+  font-size: 4rem; opacity: 0.15;
+}
+.welcome-card h2 { font-size: 1.3rem; margin-bottom: 6px; }
+.welcome-card p { color: rgba(255,255,255,0.65); font-size: 0.9rem; }
+
+.section-title {
+  font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase;
+  letter-spacing: 2px; margin-bottom: 12px; margin-top: 8px;
+}
+
+.topic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+
+.topic-card {
+  background: var(--surface); border-radius: var(--radius);
+  padding: 18px 16px; cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s ease; position: relative; overflow: hidden;
+}
+.topic-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.1); }
+.topic-card:active { transform: scale(0.97); }
+.topic-card .emoji { font-size: 1.8rem; margin-bottom: 8px; display: block; }
+.topic-card .name { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+.topic-card .desc { font-size: 0.72rem; color: var(--text-dim); line-height: 1.3; }
+.topic-card .best { font-size: 0.7rem; color: var(--accent3); margin-top: 8px; font-weight: 500; }
+.topic-card.c1 { border-color: rgba(255,107,107,0.2); }
+.topic-card.c1:hover { border-color: var(--accent1); box-shadow: var(--glow-red); }
+.topic-card.c2 { border-color: rgba(255,217,61,0.2); }
+.topic-card.c2:hover { border-color: var(--accent2); box-shadow: var(--glow-yellow); }
+.topic-card.c3 { border-color: rgba(107,203,119,0.2); }
+.topic-card.c3:hover { border-color: var(--accent3); box-shadow: var(--glow-green); }
+.topic-card.c4 { border-color: rgba(77,150,255,0.2); }
+.topic-card.c4:hover { border-color: var(--accent4); box-shadow: var(--glow-blue); }
+.topic-card.c5 { border-color: rgba(192,132,252,0.2); }
+.topic-card.c5:hover { border-color: var(--accent5); box-shadow: 0 0 20px rgba(192,132,252,0.4); }
+.topic-card.c6 { border-color: rgba(255,107,107,0.15); }
+.topic-card.c6:hover { border-color: var(--accent1); box-shadow: var(--glow-red); }
+
+/* ===== SCREEN: GAME ===== */
+.game-screen { animation: fadeUp 0.35s ease; }
+
+.game-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 16px;
+}
+.back-btn {
+  background: var(--surface); border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text); border-radius: 12px; padding: 8px 16px;
+  font-family: inherit; font-size: 0.85rem; cursor: pointer;
+  transition: all 0.15s;
+}
+.back-btn:hover { background: var(--surface2); }
+
+.game-stats {
+  display: flex; gap: 16px; font-size: 0.85rem; font-weight: 600;
+}
+.game-stats .correct { color: var(--accent3); }
+.game-stats .wrong { color: var(--accent1); }
+
+.streak-bar {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 16px;
+  padding: 10px 16px; background: var(--surface); border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.streak-bar .label { font-size: 0.78rem; color: var(--text-dim); }
+.streak-bar .flames { font-size: 1.1rem; letter-spacing: 2px; }
+.streak-bar .bonus { font-size: 0.75rem; color: var(--accent2); font-weight: 600; margin-left: auto; }
+
+.question-card {
+  background: var(--surface); border-radius: var(--radius);
+  padding: 32px 24px; text-align: center; margin-bottom: 16px;
+  border: 1px solid rgba(255,255,255,0.06);
+  min-height: 140px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  position: relative;
+}
+.question-card .q-number {
+  position: absolute; top: 12px; left: 16px;
+  font-size: 0.7rem; color: var(--text-dim); font-weight: 500;
+}
+.question-card .timer-badge {
+  position: absolute; top: 12px; right: 16px;
+  font-size: 0.8rem; font-weight: 600; color: var(--accent2);
+  font-family: 'Space Mono', monospace;
+}
+.question-card .timer-badge.urgent { color: var(--accent1); animation: pulse 0.5s infinite; }
+.question-text {
+  font-size: 1.6rem; font-weight: 700; line-height: 1.4;
+  font-family: 'Space Mono', monospace;
+}
+.question-hint {
+  font-size: 0.8rem; color: var(--text-dim); margin-top: 10px;
+}
+
+.answers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.answer-btn {
+  background: var(--surface); border: 2px solid rgba(255,255,255,0.08);
+  color: var(--text); border-radius: 14px; padding: 18px 12px;
+  font-family: 'Space Mono', monospace; font-size: 1.15rem; font-weight: 700;
+  cursor: pointer; transition: all 0.15s; position: relative;
+}
+.answer-btn:hover:not(.disabled) {
+  border-color: var(--accent4); transform: translateY(-1px);
+  box-shadow: var(--glow-blue);
+}
+.answer-btn:active:not(.disabled) { transform: scale(0.96); }
+.answer-btn.correct-pick {
+  border-color: var(--accent3); background: rgba(107,203,119,0.15);
+  box-shadow: var(--glow-green); animation: correctPop 0.4s ease;
+}
+.answer-btn.wrong-pick {
+  border-color: var(--accent1); background: rgba(255,107,107,0.12);
+  box-shadow: var(--glow-red); animation: shake 0.4s ease;
+}
+.answer-btn.reveal-correct {
+  border-color: var(--accent3); background: rgba(107,203,119,0.08);
+}
+.answer-btn.disabled { opacity: 0.5; cursor: default; pointer-events: none; }
+
+/* ===== SCREEN: RESULTS ===== */
+.results-screen { animation: fadeUp 0.4s ease; text-align: center; padding-top: 40px; }
+.results-screen .big-emoji { font-size: 5rem; margin-bottom: 16px; animation: bounceIn 0.6s ease; }
+.results-screen h2 { font-size: 1.8rem; margin-bottom: 6px; }
+.results-screen .subtitle { color: var(--text-dim); margin-bottom: 28px; font-size: 0.95rem; }
+
+.result-stats {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 28px;
+}
+.result-stat {
+  background: var(--surface); border-radius: var(--radius); padding: 18px 10px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.result-stat .val { font-size: 1.6rem; font-weight: 700; font-family: 'Space Mono', monospace; }
+.result-stat .lbl { font-size: 0.7rem; color: var(--text-dim); margin-top: 4px; }
+.result-stat.green .val { color: var(--accent3); }
+.result-stat.red .val { color: var(--accent1); }
+.result-stat.yellow .val { color: var(--accent2); }
+
+.xp-earned {
+  background: linear-gradient(135deg, #1e1b4b, #312e81);
+  border-radius: var(--radius); padding: 20px; margin-bottom: 24px;
+  border: 1px solid rgba(129,140,248,0.15);
+  font-size: 1.1rem; font-weight: 600;
+}
+.xp-earned .big { font-size: 1.8rem; color: var(--accent2); }
+
+.action-btns { display: flex; flex-direction: column; gap: 10px; }
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent4), var(--accent5));
+  color: white; border: none; border-radius: 14px; padding: 16px;
+  font-family: inherit; font-size: 1rem; font-weight: 600;
+  cursor: pointer; transition: all 0.15s;
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(77,150,255,0.3); }
+.btn-secondary {
+  background: var(--surface); color: var(--text); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px; padding: 14px; font-family: inherit; font-size: 0.95rem;
+  font-weight: 500; cursor: pointer; transition: all 0.15s;
+}
+.btn-secondary:hover { background: var(--surface2); }
+
+/* ===== LEVEL UP OVERLAY ===== */
+.level-up-overlay {
+  position: fixed; inset: 0; background: rgba(15,14,23,0.9);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100; animation: fadeIn 0.3s ease;
+}
+.level-up-card {
+  text-align: center; animation: bounceIn 0.5s ease;
+}
+.level-up-card .stars { font-size: 3rem; margin-bottom: 8px; }
+.level-up-card h2 { font-size: 2rem; color: var(--accent2); margin-bottom: 4px; }
+.level-up-card p { color: var(--text-dim); margin-bottom: 20px; }
+.level-up-card button {
+  background: var(--accent2); color: var(--bg); border: none; border-radius: 12px;
+  padding: 12px 32px; font-family: inherit; font-size: 1rem; font-weight: 600;
+  cursor: pointer;
+}
+
+/* ===== PARTICLES ===== */
+.particle {
+  position: fixed; pointer-events: none; z-index: 200;
+  font-size: 1.5rem; animation: particleUp 0.8s ease forwards;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes bounceIn { 0% { transform: scale(0.5); opacity: 0; } 60% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
+@keyframes correctPop { 0% { transform: scale(1); } 40% { transform: scale(1.06); } 100% { transform: scale(1); } }
+@keyframes shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+@keyframes particleUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-80px) scale(0.5); } }
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 4px; }
+
+/* Mobile tweaks */
+@media (max-width: 400px) {
+  .question-text { font-size: 1.3rem; }
+  .answer-btn { padding: 14px 10px; font-size: 1rem; }
+  .topic-grid { gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<div class="app" id="app"></div>
+
+<script>
+// ===== GAME STATE =====
+const STATE = {
+  screen: 'home', // home | game | results
+  xp: parseInt(localStorage.getItem('mq_xp') || '0'),
+  level: parseInt(localStorage.getItem('mq_level') || '1'),
+  totalCorrect: parseInt(localStorage.getItem('mq_totalCorrect') || '0'),
+  topicBests: JSON.parse(localStorage.getItem('mq_topicBests') || '{}'),
+  // game state
+  topic: null,
+  questions: [],
+  currentQ: 0,
+  correct: 0,
+  wrong: 0,
+  streak: 0,
+  bestStreak: 0,
+  timeLeft: 0,
+  timerInterval: null,
+  answered: false,
+  roundXP: 0,
+  showLevelUp: false,
+  newLevel: 0,
+};
+
+const XP_PER_LEVEL = 120;
+function xpForLevel(lv) { return (lv - 1) * XP_PER_LEVEL; }
+function xpProgress() { return STATE.xp - xpForLevel(STATE.level); }
+function xpNeeded() { return XP_PER_LEVEL; }
+
+function save() {
+  localStorage.setItem('mq_xp', STATE.xp);
+  localStorage.setItem('mq_level', STATE.level);
+  localStorage.setItem('mq_totalCorrect', STATE.totalCorrect);
+  localStorage.setItem('mq_topicBests', JSON.stringify(STATE.topicBests));
+}
+
+// ===== TOPICS & QUESTION GENERATORS =====
+const TOPICS = [
+  {
+    id: 'integers', name: 'Integers', emoji: '🔢',
+    desc: 'Add, subtract & multiply positive and negative numbers',
+    color: 'c1',
+    generate: () => {
+      const ops = ['+', '−', '×'];
+      const op = ops[Math.floor(Math.random() * ops.length)];
+      let a, b, answer;
+      if (op === '×') {
+        a = randInt(-12, 12); b = randInt(-12, 12);
+        answer = a * b;
+      } else if (op === '+') {
+        a = randInt(-50, 50); b = randInt(-50, 50);
+        answer = a + b;
+      } else {
+        a = randInt(-50, 50); b = randInt(-50, 50);
+        answer = a - b;
+      }
+      const aStr = a < 0 ? `(${a})` : `${a}`;
+      const bStr = b < 0 ? `(${b})` : `${b}`;
+      return { text: `${aStr} ${op} ${bStr}`, answer, hint: op === '×' ? 'Negative × Negative = Positive' : null };
+    }
+  },
+  {
+    id: 'fractions', name: 'Fractions', emoji: '🍕',
+    desc: 'Simplify, add & compare fractions',
+    color: 'c2',
+    generate: () => {
+      const type = randInt(0, 2);
+      if (type === 0) {
+        // Simplify
+        const factor = randInt(2, 6);
+        const num = randInt(1, 8);
+        const den = randInt(num + 1, 12);
+        const g = gcd(num, den);
+        const sNum = num / g, sDen = den / g;
+        return {
+          text: `Simplify: ${num * factor}/${den * factor}`,
+          answer: `${sNum}/${sDen}`,
+          choices: generateFractionChoices(sNum, sDen),
+          hint: 'Find the GCF of top and bottom'
+        };
+      } else if (type === 1) {
+        // Add fractions
+        const d = randFrom([2, 3, 4, 5, 6, 8]);
+        const a = randInt(1, d - 1);
+        const d2 = randFrom([2, 3, 4, 5, 6, 8]);
+        const b = randInt(1, d2 - 1);
+        const num = a * d2 + b * d;
+        const den = d * d2;
+        const g = gcd(num, den);
+        const rn = num / g, rd = den / g;
+        const ansStr = rn >= rd ? (rn % rd === 0 ? `${rn/rd}` : `${Math.floor(rn/rd)} ${rn%rd}/${rd}`) : `${rn}/${rd}`;
+        return {
+          text: `${a}/${d} + ${b}/${d2}`,
+          answer: ansStr,
+          choices: generateFractionAddChoices(ansStr, rn, rd),
+          hint: 'Find a common denominator first'
+        };
+      } else {
+        // Compare
+        const d1 = randFrom([2, 3, 4, 5, 6, 8, 10]);
+        const n1 = randInt(1, d1 - 1);
+        const d2 = randFrom([2, 3, 4, 5, 6, 8, 10]);
+        const n2 = randInt(1, d2 - 1);
+        const v1 = n1 / d1, v2 = n2 / d2;
+        const ans = v1 > v2 ? '>' : v1 < v2 ? '<' : '=';
+        return {
+          text: `${n1}/${d1}  ?  ${n2}/${d2}`,
+          answer: ans,
+          choices: ['<', '>', '=', `${n1}/${d1}`].sort(() => Math.random() - 0.5).slice(0, 4),
+          isRaw: true,
+          hint: 'Cross multiply to compare'
+        };
+      }
+    }
+  },
+  {
+    id: 'percents', name: 'Percentages', emoji: '💯',
+    desc: 'Find percentages, discounts & tips',
+    color: 'c3',
+    generate: () => {
+      const type = randInt(0, 2);
+      if (type === 0) {
+        const pct = randFrom([10, 15, 20, 25, 30, 40, 50, 75]);
+        const num = randFrom([40, 50, 60, 80, 100, 120, 150, 200, 250, 300]);
+        const answer = (pct / 100) * num;
+        return { text: `${pct}% of ${num}`, answer, hint: 'Divide percent by 100, then multiply' };
+      } else if (type === 1) {
+        const orig = randFrom([20, 25, 40, 50, 60, 80, 100, 120, 200]);
+        const pct = randFrom([10, 20, 25, 30, 50]);
+        const discount = orig * pct / 100;
+        const answer = orig - discount;
+        return {
+          text: `₹${orig} item, ${pct}% off.\nSale price?`,
+          answer,
+          hint: 'Find the discount amount, then subtract'
+        };
+      } else {
+        const part = randInt(3, 48);
+        const whole = randFrom([50, 60, 80, 100, 120, 150, 200]);
+        const answer = Math.round((part / whole) * 100 * 10) / 10;
+        return {
+          text: `${part} out of ${whole}\n= what %?`,
+          answer,
+          hint: 'Divide part by whole, then × 100'
+        };
+      }
+    }
+  },
+  {
+    id: 'decimals', name: 'Decimals', emoji: '🎯',
+    desc: 'Multiply, divide & convert decimals',
+    color: 'c4',
+    generate: () => {
+      const type = randInt(0, 2);
+      if (type === 0) {
+        const a = (randInt(1, 99) / 10);
+        const b = (randInt(1, 99) / 10);
+        const answer = Math.round((a + b) * 100) / 100;
+        return { text: `${a} + ${b}`, answer };
+      } else if (type === 1) {
+        const a = (randInt(11, 99) / 10);
+        const b = randInt(2, 9);
+        const answer = Math.round(a * b * 100) / 100;
+        return { text: `${a} × ${b}`, answer, hint: 'Multiply as whole numbers, then place the decimal' };
+      } else {
+        // Convert fraction to decimal
+        const pairs = [[1,2,'0.5'],[1,4,'0.25'],[3,4,'0.75'],[1,5,'0.2'],[2,5,'0.4'],[3,5,'0.6'],[1,8,'0.125'],[3,8,'0.375'],[1,10,'0.1'],[7,10,'0.7']];
+        const [n, d, ans] = randFrom(pairs);
+        return {
+          text: `${n}/${d} as a decimal?`,
+          answer: ans,
+          choices: generateDecimalChoices(parseFloat(ans)),
+          isRaw: true,
+          hint: 'Divide numerator by denominator'
+        };
+      }
+    }
+  },
+  {
+    id: 'algebra', name: 'Pre-Algebra', emoji: '🔮',
+    desc: 'Solve for x in simple equations',
+    color: 'c5',
+    generate: () => {
+      const type = randInt(0, 2);
+      if (type === 0) {
+        // ax + b = c
+        const a = randFrom([2, 3, 4, 5, 6, 7, 8]);
+        const x = randInt(-10, 10);
+        const b = randInt(-15, 15);
+        const c = a * x + b;
+        const bStr = b >= 0 ? `+ ${b}` : `− ${Math.abs(b)}`;
+        return { text: `${a}x ${bStr} = ${c}\nx = ?`, answer: x, hint: 'Isolate x: subtract, then divide' };
+      } else if (type === 1) {
+        // x/a + b = c
+        const a = randFrom([2, 3, 4, 5]);
+        const x = a * randInt(-8, 8);
+        const b = randInt(-10, 10);
+        const c = x / a + b;
+        const bStr = b >= 0 ? `+ ${b}` : `− ${Math.abs(b)}`;
+        return { text: `x/${a} ${bStr} = ${c}\nx = ?`, answer: x, hint: 'Subtract first, then multiply both sides' };
+      } else {
+        // simple pattern: what is the next term
+        const start = randInt(1, 5);
+        const diff = randFrom([2, 3, 4, 5, 6, 7]);
+        const terms = [start, start + diff, start + 2*diff, start + 3*diff];
+        const answer = start + 4*diff;
+        return { text: `${terms.join(', ')}, ?\nFind the next term`, answer, hint: 'Find the common difference' };
+      }
+    }
+  },
+  {
+    id: 'geometry', name: 'Geometry', emoji: '📐',
+    desc: 'Area, perimeter & angle problems',
+    color: 'c6',
+    generate: () => {
+      const type = randInt(0, 3);
+      if (type === 0) {
+        // Rectangle area
+        const l = randInt(3, 15); const w = randInt(3, 15);
+        return { text: `Rectangle: ${l} × ${w}\nArea = ?`, answer: l * w, hint: 'Area = length × width' };
+      } else if (type === 1) {
+        // Triangle area
+        const b = randInt(4, 16); const h = randInt(3, 14);
+        const answer = (b * h) / 2;
+        return { text: `Triangle: base=${b}, height=${h}\nArea = ?`, answer, hint: 'Area = ½ × base × height' };
+      } else if (type === 2) {
+        // Circle area (π ≈ 3.14)
+        const r = randInt(2, 10);
+        const answer = Math.round(3.14 * r * r * 100) / 100;
+        return { text: `Circle: radius = ${r}\nArea = ? (use π ≈ 3.14)`, answer, hint: 'Area = π × r²' };
+      } else {
+        // Missing angle in triangle
+        const a1 = randInt(20, 80); const a2 = randInt(20, 140 - a1);
+        const answer = 180 - a1 - a2;
+        return { text: `Triangle angles:\n${a1}°, ${a2}°, ?°`, answer, hint: 'Angles in a triangle add to 180°' };
+      }
+    }
+  }
+];
+
+// ===== HELPERS =====
+function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+function randFrom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { [a, b] = [b, a % b]; } return a; }
+
+function generateChoices(correct) {
+  const choices = new Set();
+  choices.add(correct);
+  let attempts = 0;
+  while (choices.size < 4 && attempts < 50) {
+    let offset;
+    if (Math.abs(correct) < 10) offset = randInt(1, 8);
+    else if (Math.abs(correct) < 100) offset = randInt(1, 20);
+    else offset = randInt(1, 50);
+    const wrong = correct + (Math.random() < 0.5 ? offset : -offset);
+    if (wrong !== correct) choices.add(Math.round(wrong * 100) / 100);
+    attempts++;
+  }
+  while (choices.size < 4) choices.add(correct + choices.size * 3);
+  return shuffle([...choices]);
+}
+
+function generateFractionChoices(sNum, sDen) {
+  const correct = `${sNum}/${sDen}`;
+  const set = new Set([correct]);
+  // plausible wrong answers
+  if (sNum + 1 < sDen) set.add(`${sNum+1}/${sDen}`);
+  set.add(`${sNum}/${sDen + 1}`);
+  if (sNum > 1) set.add(`${sNum-1}/${sDen}`);
+  set.add(`${sNum * 2}/${sDen * 2}`);
+  return shuffle([...set]).slice(0, 4);
+}
+
+function generateFractionAddChoices(correct, rn, rd) {
+  const set = new Set([correct]);
+  if (rn < rd) { set.add(`${rn+1}/${rd}`); set.add(`${rn}/${rd+1}`); }
+  else { set.add(`${Math.floor(rn/rd)+1} ${rn%rd}/${rd}`); }
+  set.add(`${rn+2}/${rd}`);
+  while (set.size < 4) set.add(`${randInt(1,9)}/${randFrom([2,3,4,5,6,8])}`);
+  return shuffle([...set]).slice(0, 4);
+}
+
+function generateDecimalChoices(correct) {
+  const set = new Set([`${correct}`]);
+  set.add(`${Math.round((correct + 0.25) * 1000) / 1000}`);
+  set.add(`${Math.round((correct - 0.15) * 1000) / 1000}`);
+  set.add(`${Math.round((correct + 0.1) * 1000) / 1000}`);
+  set.add(`${Math.round((1 - correct) * 1000) / 1000}`);
+  return shuffle([...set]).slice(0, 4);
+}
+
+function shuffle(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = randInt(0, i); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
+
+function generateQuestions(topic, count = 10) {
+  const qs = [];
+  for (let i = 0; i < count; i++) {
+    const q = topic.generate();
+    if (!q.choices && !q.isRaw) q.choices = generateChoices(q.answer);
+    qs.push(q);
+  }
+  return qs;
+}
+
+// ===== AUDIO (Web Audio API beeps) =====
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+function ensureAudio() { if (!audioCtx) audioCtx = new AudioCtx(); }
+
+function playCorrect() {
+  ensureAudio();
+  const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  o.type = 'sine'; o.frequency.setValueAtTime(523, audioCtx.currentTime);
+  o.frequency.setValueAtTime(659, audioCtx.currentTime + 0.08);
+  o.frequency.setValueAtTime(784, audioCtx.currentTime + 0.16);
+  g.gain.setValueAtTime(0.15, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+  o.start(); o.stop(audioCtx.currentTime + 0.4);
+}
+
+function playWrong() {
+  ensureAudio();
+  const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  o.type = 'sawtooth'; o.frequency.setValueAtTime(200, audioCtx.currentTime);
+  o.frequency.setValueAtTime(150, audioCtx.currentTime + 0.15);
+  g.gain.setValueAtTime(0.08, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+  o.start(); o.stop(audioCtx.currentTime + 0.3);
+}
+
+function playLevelUp() {
+  ensureAudio();
+  [523, 659, 784, 1047].forEach((f, i) => {
+    const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.type = 'sine'; o.frequency.value = f;
+    g.gain.setValueAtTime(0.12, audioCtx.currentTime + i * 0.12);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.12 + 0.3);
+    o.start(audioCtx.currentTime + i * 0.12);
+    o.stop(audioCtx.currentTime + i * 0.12 + 0.3);
+  });
+}
+
+// ===== PARTICLES =====
+function spawnParticles(x, y, emojis = ['✨', '⭐', '💫']) {
+  for (let i = 0; i < 5; i++) {
+    const el = document.createElement('div');
+    el.className = 'particle';
+    el.textContent = randFrom(emojis);
+    el.style.left = (x + randInt(-30, 30)) + 'px';
+    el.style.top = (y + randInt(-10, 10)) + 'px';
+    el.style.animationDelay = (i * 0.08) + 's';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1000);
+  }
+}
+
+// ===== RENDER =====
+function render() {
+  const app = document.getElementById('app');
+  let html = renderTopBar();
+
+  if (STATE.screen === 'home') html += renderHome();
+  else if (STATE.screen === 'game') html += renderGame();
+  else if (STATE.screen === 'results') html += renderResults();
+
+  app.innerHTML = html;
+
+  if (STATE.showLevelUp) renderLevelUpOverlay();
+
+  bindEvents();
+}
+
+function renderTopBar() {
+  const progress = Math.min(100, (xpProgress() / xpNeeded()) * 100);
+  return `
+    <div class="top-bar">
+      <div class="logo">Math Quest <span>⚡</span></div>
+      <div class="stats-row">
+        <div class="stat-pill"><span class="icon">⭐</span> ${STATE.xp} XP</div>
+        <div class="stat-pill"><span class="icon">🏆</span> ${STATE.totalCorrect}</div>
+      </div>
+    </div>
+    <div class="xp-section">
+      <div class="xp-header"><span>Level ${STATE.level}</span><span>${xpProgress()} / ${xpNeeded()} XP</span></div>
+      <div class="xp-bar-bg"><div class="xp-bar-fill" style="width:${progress}%"></div></div>
+    </div>
+  `;
+}
+
+function renderHome() {
+  let cards = '';
+  TOPICS.forEach(t => {
+    const best = STATE.topicBests[t.id];
+    const bestHtml = best !== undefined ? `<div class="best">Best: ${best}/10</div>` : '';
+    cards += `
+      <div class="topic-card ${t.color}" data-topic="${t.id}">
+        <span class="emoji">${t.emoji}</span>
+        <div class="name">${t.name}</div>
+        <div class="desc">${t.desc}</div>
+        ${bestHtml}
+      </div>
+    `;
+  });
+  return `
+    <div class="home-screen">
+      <div class="welcome-card">
+        <h2>Ready to level up? 🚀</h2>
+        <p>Pick a topic and answer 10 questions. Build streaks for bonus XP!</p>
+      </div>
+      <div class="section-title">Choose your challenge</div>
+      <div class="topic-grid">${cards}</div>
+    </div>
+  `;
+}
+
+function renderGame() {
+  if (STATE.currentQ >= STATE.questions.length) return '';
+  const q = STATE.questions[STATE.currentQ];
+  const streakEmojis = '🔥'.repeat(Math.min(STATE.streak, 10));
+  const bonusText = STATE.streak >= 3 ? `+${STATE.streak} bonus XP` : STATE.streak >= 2 ? 'Almost there...' : '';
+
+  let choicesHtml = '';
+  const choices = q.choices || generateChoices(q.answer);
+  q._displayChoices = choices;
+  choices.forEach((c, i) => {
+    let cls = 'answer-btn';
+    if (STATE.answered) {
+      const isCorrect = `${c}` === `${q.answer}`;
+      if (q._picked === i && isCorrect) cls += ' correct-pick';
+      else if (q._picked === i && !isCorrect) cls += ' wrong-pick';
+      else if (isCorrect) cls += ' reveal-correct';
+      else cls += ' disabled';
+    }
+    choicesHtml += `<button class="${cls}" data-idx="${i}">${c}</button>`;
+  });
+
+  const timerCls = STATE.timeLeft <= 5 ? 'timer-badge urgent' : 'timer-badge';
+
+  return `
+    <div class="game-screen">
+      <div class="game-header">
+        <button class="back-btn" id="backBtn">← Back</button>
+        <div class="game-stats">
+          <span class="correct">✓ ${STATE.correct}</span>
+          <span class="wrong">✗ ${STATE.wrong}</span>
+        </div>
+      </div>
+      <div class="streak-bar">
+        <span class="label">Streak</span>
+        <span class="flames">${streakEmojis || '—'}</span>
+        <span class="bonus">${bonusText}</span>
+      </div>
+      <div class="question-card">
+        <span class="q-number">Q${STATE.currentQ + 1} / ${STATE.questions.length}</span>
+        <span class="${timerCls}">${STATE.timeLeft}s</span>
+        <div class="question-text">${q.text.replace(/\n/g, '<br>')}</div>
+        ${q.hint ? `<div class="question-hint">💡 ${q.hint}</div>` : ''}
+      </div>
+      <div class="answers-grid">${choicesHtml}</div>
+    </div>
+  `;
+}
+
+function renderResults() {
+  const pct = Math.round((STATE.correct / STATE.questions.length) * 100);
+  const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '🌟' : pct >= 50 ? '💪' : '📚';
+  const msg = pct >= 90 ? 'Incredible!' : pct >= 70 ? 'Great job!' : pct >= 50 ? 'Not bad!' : 'Keep practicing!';
+  const sub = pct >= 90 ? 'You\'re a math wizard!' : pct >= 70 ? 'Almost perfect — so close!' : pct >= 50 ? 'You\'re getting there!' : 'Every mistake is a lesson 🧠';
+
+  return `
+    <div class="results-screen">
+      <div class="big-emoji">${emoji}</div>
+      <h2>${msg}</h2>
+      <p class="subtitle">${sub}</p>
+      <div class="result-stats">
+        <div class="result-stat green"><div class="val">${STATE.correct}</div><div class="lbl">Correct</div></div>
+        <div class="result-stat red"><div class="val">${STATE.wrong}</div><div class="lbl">Wrong</div></div>
+        <div class="result-stat yellow"><div class="val">${STATE.bestStreak}</div><div class="lbl">Best Streak</div></div>
+      </div>
+      <div class="xp-earned">
+        You earned <span class="big">+${STATE.roundXP} XP</span>
+      </div>
+      <div class="action-btns">
+        <button class="btn-primary" id="retryBtn">🔄 Play Again — ${STATE.topic.name}</button>
+        <button class="btn-secondary" id="homeBtn">🏠 Back to Topics</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderLevelUpOverlay() {
+  const overlay = document.createElement('div');
+  overlay.className = 'level-up-overlay';
+  overlay.id = 'levelOverlay';
+  overlay.innerHTML = `
+    <div class="level-up-card">
+      <div class="stars">🌟✨🌟</div>
+      <h2>LEVEL ${STATE.newLevel}!</h2>
+      <p>You're on fire — keep going!</p>
+      <button id="dismissLevel">Let's Go! 🚀</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  playLevelUp();
+  document.getElementById('dismissLevel').addEventListener('click', () => {
+    STATE.showLevelUp = false;
+    overlay.remove();
+  });
+}
+
+// ===== EVENTS =====
+function bindEvents() {
+  // Topic cards
+  document.querySelectorAll('.topic-card').forEach(el => {
+    el.addEventListener('click', () => startGame(el.dataset.topic));
+  });
+
+  // Answer buttons
+  document.querySelectorAll('.answer-btn').forEach(el => {
+    el.addEventListener('click', (e) => handleAnswer(parseInt(el.dataset.idx), e));
+  });
+
+  // Back
+  const backBtn = document.getElementById('backBtn');
+  if (backBtn) backBtn.addEventListener('click', goHome);
+
+  // Retry
+  const retryBtn = document.getElementById('retryBtn');
+  if (retryBtn) retryBtn.addEventListener('click', () => startGame(STATE.topic.id));
+
+  // Home
+  const homeBtn = document.getElementById('homeBtn');
+  if (homeBtn) homeBtn.addEventListener('click', goHome);
+}
+
+function startGame(topicId) {
+  const topic = TOPICS.find(t => t.id === topicId);
+  STATE.topic = topic;
+  STATE.questions = generateQuestions(topic, 10);
+  STATE.currentQ = 0;
+  STATE.correct = 0;
+  STATE.wrong = 0;
+  STATE.streak = 0;
+  STATE.bestStreak = 0;
+  STATE.answered = false;
+  STATE.roundXP = 0;
+  STATE.screen = 'game';
+  startTimer();
+  render();
+}
+
+function startTimer() {
+  clearInterval(STATE.timerInterval);
+  STATE.timeLeft = 20;
+  STATE.timerInterval = setInterval(() => {
+    STATE.timeLeft--;
+    const badge = document.querySelector('.timer-badge');
+    if (badge) {
+      badge.textContent = STATE.timeLeft + 's';
+      if (STATE.timeLeft <= 5) badge.classList.add('urgent');
+    }
+    if (STATE.timeLeft <= 0) {
+      clearInterval(STATE.timerInterval);
+      if (!STATE.answered) timeOut();
+    }
+  }, 1000);
+}
+
+function handleAnswer(idx, event) {
+  if (STATE.answered) return;
+  STATE.answered = true;
+  clearInterval(STATE.timerInterval);
+
+  const q = STATE.questions[STATE.currentQ];
+  q._picked = idx;
+  const picked = `${q._displayChoices[idx]}`;
+  const correct = `${q.answer}`;
+  const isCorrect = picked === correct;
+
+  if (isCorrect) {
+    STATE.correct++;
+    STATE.streak++;
+    STATE.totalCorrect++;
+    if (STATE.streak > STATE.bestStreak) STATE.bestStreak = STATE.streak;
+    const streakBonus = Math.max(0, STATE.streak - 1);
+    const timeBonus = Math.max(0, Math.floor(STATE.timeLeft / 4));
+    const earned = 5 + streakBonus + timeBonus;
+    STATE.roundXP += earned;
+    playCorrect();
+    spawnParticles(event.clientX, event.clientY, ['✅', '⭐', '💫', '🎉']);
+  } else {
+    STATE.wrong++;
+    STATE.streak = 0;
+    playWrong();
+  }
+
+  render();
+
+  setTimeout(() => {
+    STATE.currentQ++;
+    STATE.answered = false;
+    if (STATE.currentQ >= STATE.questions.length) {
+      endRound();
+    } else {
+      startTimer();
+      render();
+    }
+  }, 1200);
+}
+
+function timeOut() {
+  STATE.answered = true;
+  STATE.wrong++;
+  STATE.streak = 0;
+  const q = STATE.questions[STATE.currentQ];
+  q._picked = -1;
+  playWrong();
+  render();
+  setTimeout(() => {
+    STATE.currentQ++;
+    STATE.answered = false;
+    if (STATE.currentQ >= STATE.questions.length) endRound();
+    else { startTimer(); render(); }
+  }, 1200);
+}
+
+function endRound() {
+  clearInterval(STATE.timerInterval);
+  // Award XP
+  const oldLevel = STATE.level;
+  STATE.xp += STATE.roundXP;
+  // Check level up
+  while (STATE.xp >= xpForLevel(STATE.level + 1)) {
+    STATE.level++;
+  }
+  if (STATE.level > oldLevel) {
+    STATE.showLevelUp = true;
+    STATE.newLevel = STATE.level;
+  }
+  // Save best
+  const prev = STATE.topicBests[STATE.topic.id] || 0;
+  if (STATE.correct > prev) STATE.topicBests[STATE.topic.id] = STATE.correct;
+
+  save();
+  STATE.screen = 'results';
+  render();
+}
+
+function goHome() {
+  clearInterval(STATE.timerInterval);
+  STATE.screen = 'home';
+  render();
+}
+
+// ===== PWA =====
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+// ===== INIT =====
+render();
+</script>
+</body>
+</html>
