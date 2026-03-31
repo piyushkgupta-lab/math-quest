@@ -182,12 +182,7 @@ body::before {
   position: absolute; top: 12px; left: 16px;
   font-size: 0.7rem; color: var(--text-dim); font-weight: 500;
 }
-.question-card .timer-badge {
-  position: absolute; top: 12px; right: 16px;
-  font-size: 0.8rem; font-weight: 600; color: var(--accent2);
-  font-family: 'Space Mono', monospace;
-}
-.question-card .timer-badge.urgent { color: var(--accent1); animation: pulse 0.5s infinite; }
+/* timer removed */
 .question-text {
   font-size: 1.6rem; font-weight: 700; line-height: 1.4;
   font-family: 'Space Mono', monospace;
@@ -301,6 +296,81 @@ body::before {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 4px; }
 
+/* ===== SCREEN: LOGIN ===== */
+.login-screen {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 80vh; animation: fadeUp 0.4s ease;
+}
+.login-card {
+  background: var(--surface); border-radius: var(--radius);
+  padding: 36px 28px; width: 100%; max-width: 360px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.login-card h2 { font-size: 1.5rem; margin-bottom: 6px; text-align: center; }
+.login-card .sub { color: var(--text-dim); font-size: 0.85rem; text-align: center; margin-bottom: 28px; }
+.login-field { margin-bottom: 16px; }
+.login-field label { display: block; font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.login-field input {
+  width: 100%; background: var(--surface2); border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text); border-radius: 10px; padding: 12px 14px;
+  font-family: 'Fredoka', sans-serif; font-size: 1rem; outline: none;
+  transition: border-color 0.15s;
+}
+.login-field input:focus { border-color: var(--accent4); }
+.login-error { color: var(--accent1); font-size: 0.82rem; text-align: center; margin-bottom: 14px; min-height: 18px; }
+.btn-login {
+  width: 100%; background: linear-gradient(135deg, var(--accent4), var(--accent5));
+  color: white; border: none; border-radius: 12px; padding: 14px;
+  font-family: inherit; font-size: 1rem; font-weight: 600; cursor: pointer;
+  transition: all 0.15s; margin-top: 4px;
+}
+.btn-login:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(77,150,255,0.3); }
+.login-footer { text-align: center; margin-top: 18px; font-size: 0.8rem; color: var(--text-dim); }
+
+/* ===== USER BADGE in top bar ===== */
+.user-badge {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--surface); border-radius: 20px;
+  padding: 6px 12px; font-size: 0.8rem; font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.05); cursor: pointer;
+  transition: background 0.15s;
+}
+.user-badge:hover { background: var(--surface2); }
+.user-badge .avatar { font-size: 1.1em; }
+
+/* ===== SCREEN: ADMIN ===== */
+.admin-screen { animation: fadeUp 0.4s ease; }
+.admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.admin-header h2 { font-size: 1.3rem; }
+.admin-user-card {
+  background: var(--surface); border-radius: var(--radius); padding: 20px;
+  margin-bottom: 14px; border: 1px solid rgba(255,255,255,0.06);
+}
+.admin-user-card .u-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.admin-user-card .u-avatar { font-size: 1.6rem; }
+.admin-user-card .u-name { font-size: 1.05rem; font-weight: 600; }
+.admin-user-card .u-level { font-size: 0.78rem; color: var(--accent4); }
+.admin-stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.admin-stat { background: var(--surface2); border-radius: 10px; padding: 12px 8px; text-align: center; }
+.admin-stat .av { font-size: 1.2rem; font-weight: 700; font-family: 'Space Mono', monospace; color: var(--accent2); }
+.admin-stat .al { font-size: 0.68rem; color: var(--text-dim); margin-top: 2px; }
+.admin-topic-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.87rem; }
+.admin-topic-row:last-child { border-bottom: none; }
+.admin-topic-row .t-name { color: var(--text-dim); }
+.admin-topic-row .t-score { font-weight: 600; color: var(--accent3); font-family: 'Space Mono', monospace; }
+.admin-topic-row .t-score.none { color: var(--text-dim); font-weight: 400; }
+.admin-sessions { margin-top: 14px; }
+.admin-sessions h4 { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
+.session-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 10px; background: var(--surface2); border-radius: 8px; margin-bottom: 5px; font-size: 0.82rem; }
+.session-row .s-topic { color: var(--text-dim); }
+.session-row .s-score { font-weight: 600; font-family: 'Space Mono', monospace; }
+.session-row .s-score.good { color: var(--accent3); }
+.session-row .s-score.ok { color: var(--accent2); }
+.session-row .s-score.low { color: var(--accent1); }
+.session-row .s-date { font-size: 0.72rem; color: var(--text-dim); }
+.no-sessions { color: var(--text-dim); font-size: 0.85rem; text-align: center; padding: 20px; }
+.admin-empty { color: var(--text-dim); font-size: 0.9rem; text-align: center; padding: 40px 20px; }
+
 /* Mobile tweaks */
 @media (max-width: 400px) {
   .question-text { font-size: 1.3rem; }
@@ -314,13 +384,40 @@ body::before {
 <div class="app" id="app"></div>
 
 <script>
+// ===== USERS CONFIG =====
+// To add/change users: edit the USERS object below.
+// Format: 'username': { password: '...', isAdmin: true/false, displayName: '...' }
+const USERS = {
+  'dad': { password: 'parent123', isAdmin: true, displayName: 'Parent 👨‍👧' },
+  'mathqueen': { password: 'math2024', isAdmin: false, displayName: 'Math Queen ⭐' },
+};
+
+// ===== AUTH =====
+function getStoredUser() {
+  try { return JSON.parse(sessionStorage.getItem('mq_user') || 'null'); } catch { return null; }
+}
+function setStoredUser(u) { sessionStorage.setItem('mq_user', JSON.stringify(u)); }
+function clearStoredUser() { sessionStorage.removeItem('mq_user'); }
+
+// ===== PER-USER DATA =====
+function getUserDataKey(username) { return `mq_data_${username}`; }
+function loadUserData(username) {
+  try {
+    const raw = localStorage.getItem(getUserDataKey(username));
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return { xp: 0, level: 1, totalCorrect: 0, topicBests: {}, sessions: [] };
+}
+function saveUserData(username, data) {
+  localStorage.setItem(getUserDataKey(username), JSON.stringify(data));
+}
+
 // ===== GAME STATE =====
 const STATE = {
-  screen: 'home', // home | game | results
-  xp: parseInt(localStorage.getItem('mq_xp') || '0'),
-  level: parseInt(localStorage.getItem('mq_level') || '1'),
-  totalCorrect: parseInt(localStorage.getItem('mq_totalCorrect') || '0'),
-  topicBests: JSON.parse(localStorage.getItem('mq_topicBests') || '{}'),
+  screen: 'login', // login | home | game | results | admin
+  currentUser: null, // { username, displayName, isAdmin }
+  userData: null,   // { xp, level, totalCorrect, topicBests, sessions }
+  loginError: '',
   // game state
   topic: null,
   questions: [],
@@ -329,24 +426,51 @@ const STATE = {
   wrong: 0,
   streak: 0,
   bestStreak: 0,
-  timeLeft: 0,
-  timerInterval: null,
   answered: false,
   roundXP: 0,
   showLevelUp: false,
   newLevel: 0,
 };
 
+// Restore session if already logged in
+const _savedUser = getStoredUser();
+if (_savedUser && USERS[_savedUser.username]) {
+  STATE.currentUser = _savedUser;
+  STATE.userData = loadUserData(_savedUser.username);
+  STATE.screen = 'home';
+}
+
 const XP_PER_LEVEL = 120;
 function xpForLevel(lv) { return (lv - 1) * XP_PER_LEVEL; }
-function xpProgress() { return STATE.xp - xpForLevel(STATE.level); }
+function xpProgress() { return STATE.userData.xp - xpForLevel(STATE.userData.level); }
 function xpNeeded() { return XP_PER_LEVEL; }
 
 function save() {
-  localStorage.setItem('mq_xp', STATE.xp);
-  localStorage.setItem('mq_level', STATE.level);
-  localStorage.setItem('mq_totalCorrect', STATE.totalCorrect);
-  localStorage.setItem('mq_topicBests', JSON.stringify(STATE.topicBests));
+  if (STATE.currentUser) saveUserData(STATE.currentUser.username, STATE.userData);
+}
+
+function doLogin(username, password) {
+  const u = USERS[username.trim().toLowerCase()];
+  if (!u || u.password !== password) {
+    STATE.loginError = 'Wrong username or password. Try again!';
+    render();
+    return;
+  }
+  STATE.currentUser = { username: username.trim().toLowerCase(), displayName: u.displayName, isAdmin: u.isAdmin };
+  STATE.userData = loadUserData(STATE.currentUser.username);
+  STATE.loginError = '';
+  setStoredUser(STATE.currentUser);
+  STATE.screen = 'home';
+  render();
+}
+
+function doLogout() {
+  clearStoredUser();
+  STATE.currentUser = null;
+  STATE.userData = null;
+  STATE.screen = 'login';
+  STATE.loginError = '';
+  render();
 }
 
 // ===== TOPICS & QUESTION GENERATORS =====
@@ -674,40 +798,77 @@ function spawnParticles(x, y, emojis = ['✨', '⭐', '💫']) {
 // ===== RENDER =====
 function render() {
   const app = document.getElementById('app');
-  let html = renderTopBar();
 
+  if (STATE.screen === 'login') {
+    app.innerHTML = renderLogin();
+    bindLoginEvents();
+    return;
+  }
+
+  let html = renderTopBar();
   if (STATE.screen === 'home') html += renderHome();
   else if (STATE.screen === 'game') html += renderGame();
   else if (STATE.screen === 'results') html += renderResults();
+  else if (STATE.screen === 'admin') html += renderAdmin();
 
   app.innerHTML = html;
-
   if (STATE.showLevelUp) renderLevelUpOverlay();
-
   bindEvents();
 }
 
-function renderTopBar() {
-  const progress = Math.min(100, (xpProgress() / xpNeeded()) * 100);
+function renderLogin() {
   return `
-    <div class="top-bar">
-      <div class="logo">Math Quest <span>⚡</span></div>
-      <div class="stats-row">
-        <div class="stat-pill"><span class="icon">⭐</span> ${STATE.xp} XP</div>
-        <div class="stat-pill"><span class="icon">🏆</span> ${STATE.totalCorrect}</div>
+    <div class="app" style="display:flex;flex-direction:column;justify-content:center;">
+      <div class="top-bar" style="justify-content:center;margin-bottom:32px;">
+        <div class="logo">Math Quest <span>⚡</span></div>
       </div>
-    </div>
-    <div class="xp-section">
-      <div class="xp-header"><span>Level ${STATE.level}</span><span>${xpProgress()} / ${xpNeeded()} XP</span></div>
-      <div class="xp-bar-bg"><div class="xp-bar-fill" style="width:${progress}%"></div></div>
+      <div class="login-screen">
+        <div class="login-card">
+          <h2>👋 Welcome back!</h2>
+          <p class="sub">Log in to track your progress</p>
+          <div class="login-field">
+            <label>Username</label>
+            <input type="text" id="loginUser" placeholder="Enter your username" autocomplete="username" />
+          </div>
+          <div class="login-field">
+            <label>Password</label>
+            <input type="password" id="loginPass" placeholder="Enter your password" autocomplete="current-password" />
+          </div>
+          <div class="login-error" id="loginErr">${STATE.loginError}</div>
+          <button class="btn-login" id="loginBtn">Let's Go! 🚀</button>
+        </div>
+      </div>
     </div>
   `;
 }
 
+function renderTopBar() {
+  const ud = STATE.userData;
+  const progress = Math.min(100, (xpProgress() / xpNeeded()) * 100);
+  const adminBtn = STATE.currentUser.isAdmin
+    ? `<div class="user-badge" id="adminBtn">📊 Progress</div>`
+    : `<div class="user-badge" id="logoutBtn"><span class="avatar">👤</span>${STATE.currentUser.displayName} <span style="font-size:0.7em;opacity:0.5">✕</span></div>`;
+  return `
+    <div class="top-bar">
+      <div class="logo">Math Quest <span>⚡</span></div>
+      <div class="stats-row">
+        ${!STATE.currentUser.isAdmin ? `<div class="stat-pill"><span class="icon">⭐</span> ${ud.xp} XP</div>` : ''}
+        ${adminBtn}
+      </div>
+    </div>
+    ${!STATE.currentUser.isAdmin ? `
+    <div class="xp-section">
+      <div class="xp-header"><span>Level ${ud.level}</span><span>${xpProgress()} / ${xpNeeded()} XP</span></div>
+      <div class="xp-bar-bg"><div class="xp-bar-fill" style="width:${progress}%"></div></div>
+    </div>` : ''}
+  `;
+}
+
 function renderHome() {
+  const ud = STATE.userData;
   let cards = '';
   TOPICS.forEach(t => {
-    const best = STATE.topicBests[t.id];
+    const best = ud.topicBests[t.id];
     const bestHtml = best !== undefined ? `<div class="best">Best: ${best}/10</div>` : '';
     cards += `
       <div class="topic-card ${t.color}" data-topic="${t.id}">
@@ -721,7 +882,7 @@ function renderHome() {
   return `
     <div class="home-screen">
       <div class="welcome-card">
-        <h2>Ready to level up? 🚀</h2>
+        <h2>Hey, ${STATE.currentUser.displayName}! 🚀</h2>
         <p>Pick a topic and answer 10 questions. Build streaks for bonus XP!</p>
       </div>
       <div class="section-title">Choose your challenge</div>
@@ -751,8 +912,6 @@ function renderGame() {
     choicesHtml += `<button class="${cls}" data-idx="${i}">${c}</button>`;
   });
 
-  const timerCls = STATE.timeLeft <= 5 ? 'timer-badge urgent' : 'timer-badge';
-
   return `
     <div class="game-screen">
       <div class="game-header">
@@ -769,7 +928,6 @@ function renderGame() {
       </div>
       <div class="question-card">
         <span class="q-number">Q${STATE.currentQ + 1} / ${STATE.questions.length}</span>
-        <span class="${timerCls}">${STATE.timeLeft}s</span>
         <div class="question-text">${q.text.replace(/\n/g, '<br>')}</div>
         ${q.hint ? `<div class="question-hint">💡 ${q.hint}</div>` : ''}
       </div>
@@ -805,6 +963,81 @@ function renderResults() {
   `;
 }
 
+function renderAdmin() {
+  // Show all non-admin users' data
+  const playerUsernames = Object.keys(USERS).filter(u => !USERS[u].isAdmin);
+
+  if (playerUsernames.length === 0) {
+    return `<div class="admin-screen"><div class="admin-header"><h2>📊 Parent View</h2><button class="back-btn" id="backBtn">← Back</button></div><div class="admin-empty">No student accounts found.</div></div>`;
+  }
+
+  let cardsHtml = '';
+  playerUsernames.forEach(username => {
+    const ud = loadUserData(username);
+    const u = USERS[username];
+    const sessions = (ud.sessions || []).slice().reverse().slice(0, 10);
+
+    let topicRowsHtml = '';
+    TOPICS.forEach(t => {
+      const best = ud.topicBests[t.id];
+      const scoreHtml = best !== undefined
+        ? `<span class="t-score">${best}/10</span>`
+        : `<span class="t-score none">Not played</span>`;
+      topicRowsHtml += `<div class="admin-topic-row"><span class="t-name">${t.emoji} ${t.name}</span>${scoreHtml}</div>`;
+    });
+
+    let sessionsHtml = '';
+    if (sessions.length === 0) {
+      sessionsHtml = `<div class="no-sessions">No sessions yet</div>`;
+    } else {
+      sessions.forEach(s => {
+        const pct = Math.round((s.correct / s.total) * 100);
+        const cls = pct >= 80 ? 'good' : pct >= 50 ? 'ok' : 'low';
+        const d = new Date(s.date);
+        const dateStr = d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+        sessionsHtml += `
+          <div class="session-row">
+            <span class="s-topic">${s.topicEmoji} ${s.topicName}</span>
+            <span class="s-score ${cls}">${s.correct}/${s.total} (${pct}%)</span>
+            <span class="s-date">${dateStr}</span>
+          </div>`;
+      });
+    }
+
+    cardsHtml += `
+      <div class="admin-user-card">
+        <div class="u-header">
+          <span class="u-avatar">👧</span>
+          <div>
+            <div class="u-name">${u.displayName}</div>
+            <div class="u-level">Level ${ud.level} · ${ud.xp} XP total</div>
+          </div>
+        </div>
+        <div class="admin-stats-grid">
+          <div class="admin-stat"><div class="av">${ud.totalCorrect}</div><div class="al">Total Correct</div></div>
+          <div class="admin-stat"><div class="av">Lv ${ud.level}</div><div class="al">Level</div></div>
+          <div class="admin-stat"><div class="av">${(ud.sessions||[]).length}</div><div class="al">Sessions</div></div>
+        </div>
+        <div class="section-title" style="margin-top:4px;">Best scores by topic</div>
+        ${topicRowsHtml}
+        <div class="admin-sessions">
+          <h4>Recent sessions</h4>
+          ${sessionsHtml}
+        </div>
+      </div>`;
+  });
+
+  return `
+    <div class="admin-screen">
+      <div class="admin-header">
+        <h2>📊 Progress Report</h2>
+        <button class="back-btn" id="logoutAdminBtn">Log Out</button>
+      </div>
+      ${cardsHtml}
+    </div>
+  `;
+}
+
 function renderLevelUpOverlay() {
   const overlay = document.createElement('div');
   overlay.className = 'level-up-overlay';
@@ -826,7 +1059,28 @@ function renderLevelUpOverlay() {
 }
 
 // ===== EVENTS =====
+function bindLoginEvents() {
+  const loginBtn = document.getElementById('loginBtn');
+  const loginPass = document.getElementById('loginPass');
+  const doIt = () => doLogin(
+    document.getElementById('loginUser').value,
+    document.getElementById('loginPass').value
+  );
+  if (loginBtn) loginBtn.addEventListener('click', doIt);
+  if (loginPass) loginPass.addEventListener('keydown', e => { if (e.key === 'Enter') doIt(); });
+}
+
 function bindEvents() {
+  // Logout / admin toggle
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) logoutBtn.addEventListener('click', doLogout);
+
+  const adminBtn = document.getElementById('adminBtn');
+  if (adminBtn) adminBtn.addEventListener('click', () => { STATE.screen = 'admin'; render(); });
+
+  const logoutAdminBtn = document.getElementById('logoutAdminBtn');
+  if (logoutAdminBtn) logoutAdminBtn.addEventListener('click', doLogout);
+
   // Topic cards
   document.querySelectorAll('.topic-card').forEach(el => {
     el.addEventListener('click', () => startGame(el.dataset.topic));
@@ -862,31 +1116,12 @@ function startGame(topicId) {
   STATE.answered = false;
   STATE.roundXP = 0;
   STATE.screen = 'game';
-  startTimer();
   render();
-}
-
-function startTimer() {
-  clearInterval(STATE.timerInterval);
-  STATE.timeLeft = 20;
-  STATE.timerInterval = setInterval(() => {
-    STATE.timeLeft--;
-    const badge = document.querySelector('.timer-badge');
-    if (badge) {
-      badge.textContent = STATE.timeLeft + 's';
-      if (STATE.timeLeft <= 5) badge.classList.add('urgent');
-    }
-    if (STATE.timeLeft <= 0) {
-      clearInterval(STATE.timerInterval);
-      if (!STATE.answered) timeOut();
-    }
-  }, 1000);
 }
 
 function handleAnswer(idx, event) {
   if (STATE.answered) return;
   STATE.answered = true;
-  clearInterval(STATE.timerInterval);
 
   const q = STATE.questions[STATE.currentQ];
   q._picked = idx;
@@ -897,11 +1132,10 @@ function handleAnswer(idx, event) {
   if (isCorrect) {
     STATE.correct++;
     STATE.streak++;
-    STATE.totalCorrect++;
+    STATE.userData.totalCorrect++;
     if (STATE.streak > STATE.bestStreak) STATE.bestStreak = STATE.streak;
     const streakBonus = Math.max(0, STATE.streak - 1);
-    const timeBonus = Math.max(0, Math.floor(STATE.timeLeft / 4));
-    const earned = 5 + streakBonus + timeBonus;
+    const earned = 5 + streakBonus;
     STATE.roundXP += earned;
     playCorrect();
     spawnParticles(event.clientX, event.clientY, ['✅', '⭐', '💫', '🎉']);
@@ -919,52 +1153,41 @@ function handleAnswer(idx, event) {
     if (STATE.currentQ >= STATE.questions.length) {
       endRound();
     } else {
-      startTimer();
       render();
     }
   }, 1200);
 }
 
-function timeOut() {
-  STATE.answered = true;
-  STATE.wrong++;
-  STATE.streak = 0;
-  const q = STATE.questions[STATE.currentQ];
-  q._picked = -1;
-  playWrong();
-  render();
-  setTimeout(() => {
-    STATE.currentQ++;
-    STATE.answered = false;
-    if (STATE.currentQ >= STATE.questions.length) endRound();
-    else { startTimer(); render(); }
-  }, 1200);
-}
-
 function endRound() {
-  clearInterval(STATE.timerInterval);
+  const ud = STATE.userData;
   // Award XP
-  const oldLevel = STATE.level;
-  STATE.xp += STATE.roundXP;
+  const oldLevel = ud.level;
+  ud.xp += STATE.roundXP;
   // Check level up
-  while (STATE.xp >= xpForLevel(STATE.level + 1)) {
-    STATE.level++;
-  }
-  if (STATE.level > oldLevel) {
-    STATE.showLevelUp = true;
-    STATE.newLevel = STATE.level;
-  }
+  while (ud.xp >= xpForLevel(ud.level + 1)) { ud.level++; }
+  if (ud.level > oldLevel) { STATE.showLevelUp = true; STATE.newLevel = ud.level; }
   // Save best
-  const prev = STATE.topicBests[STATE.topic.id] || 0;
-  if (STATE.correct > prev) STATE.topicBests[STATE.topic.id] = STATE.correct;
-
+  const prev = ud.topicBests[STATE.topic.id] || 0;
+  if (STATE.correct > prev) ud.topicBests[STATE.topic.id] = STATE.correct;
+  // Log session
+  if (!ud.sessions) ud.sessions = [];
+  ud.sessions.push({
+    date: new Date().toISOString(),
+    topicId: STATE.topic.id,
+    topicName: STATE.topic.name,
+    topicEmoji: STATE.topic.emoji,
+    correct: STATE.correct,
+    wrong: STATE.wrong,
+    total: STATE.questions.length,
+    xpEarned: STATE.roundXP,
+    bestStreak: STATE.bestStreak,
+  });
   save();
   STATE.screen = 'results';
   render();
 }
 
 function goHome() {
-  clearInterval(STATE.timerInterval);
   STATE.screen = 'home';
   render();
 }
